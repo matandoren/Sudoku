@@ -8,7 +8,7 @@
 
     <Button
         android:id="@+id/activity_create_submit_puzzle_button"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:text="@string/submit_puzzle"
         app:layout_constraintBottom_toBottomOf="parent"
