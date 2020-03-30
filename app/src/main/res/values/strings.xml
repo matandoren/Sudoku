@@ -3,4 +3,6 @@
     <string name="play_button_text">Play</string>
     <string name="create_board_button_text">Create Puzzle</string>
     <string name="help_button_text">Help</string>
+    <string name="submit_solution">Submit Solution</string>
+    <string name="phone_a_friend">Phone a friend</string>
 </resources>

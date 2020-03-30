@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="app_name">Sudoku</string>
     <string name="play_button_text">שחק</string>
     <string name="create_board_button_text">צור פאזל</string>
     <string name="help_button_text">עזרה</string>
+    <string name="submit_solution">הגש פתרון</string>
+    <string name="phone_a_friend">חבר טלפונה</string>
 </resources>
