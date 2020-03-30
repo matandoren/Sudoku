@@ -5,4 +5,9 @@
     <string name="help_button_text">Help</string>
     <string name="submit_solution">Submit Solution</string>
     <string name="phone_a_friend">Phone a friend</string>
+    <string name="sudoku_wikipedia">https://en.wikipedia.org/wiki/Sudoku</string>
+    <string name="enter_phone_helper">Enter phone helper</string>
+    <string name="cancel">Cancel</string>
+    <string name="apply">Apply</string>
+    <string name="submit_puzzle">Submit Puzzle</string>
 </resources>

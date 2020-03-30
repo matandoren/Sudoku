@@ -6,4 +6,9 @@
     <string name="help_button_text">עזרה</string>
     <string name="submit_solution">הגש פתרון</string>
     <string name="phone_a_friend">חבר טלפונה</string>
+    <string name="sudoku_wikipedia">https://he.wikipedia.org/wiki/%D7%A1%D7%95%D7%93%D7%95%D7%A7%D7%95</string>
+    <string name="enter_phone_helper">הכנס מספר של העוזר</string>
+    <string name="cancel">בטל</string>
+    <string name="apply">אשר</string>
+    <string name="submit_puzzle">Submit Puzzle</string>
 </resources>

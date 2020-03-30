@@ -30,7 +30,7 @@
         tools:ignore="VectorDrawableCompat" />
 
     <TextView
-        android:id="@+id/activity_play_phone_a_friend_button_text_view"
+        android:id="@+id/activity_play_phone_a_friend_text_view"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:gravity="center"
@@ -47,11 +47,21 @@
         android:layout_height="wrap_content"
         android:gravity="center"
         android:textSize="30dp"
-        app:layout_constraintBottom_toTopOf="@+id/activity_play_phone_a_friend_button_text_view"
+        app:layout_constraintBottom_toTopOf="@+id/activity_play_phone_a_friend_text_view"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.0" />
+
+    <view
+        android:id="@+id/activity_play_sudoku_view"
+        class="com.example.sudoku.SudokuView"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toTopOf="@+id/activity_play_phone_a_friend_text_view"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/activity_play_chronometer" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
