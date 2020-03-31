@@ -13,7 +13,6 @@ import android.view.View;
 import androidx.annotation.Nullable;
 
 public class SudokuView extends View {
-    public final int BOARD_SIZE = 9; // the board has BOARD_SIZE * BOARD_SIZE entries
     public final float MIN_SCALE_FACTOR = 1.f;
     public final float MAX_SCALE_FACTOR = 2.5f;
     public final float FONT_SIZE = 35.f;
@@ -33,16 +32,13 @@ public class SudokuView extends View {
     private Paint textColor;
     private Paint gridColor;
     private SudokuEntry[][] board;
+    private int boardSize;
+    private int squareSize;
 
 
 
     public SudokuView(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
-
-        board = new SudokuEntry[BOARD_SIZE][BOARD_SIZE];
-        for (int i = 0; i < BOARD_SIZE; i++)
-            for (int j = 0; j < BOARD_SIZE; j++)
-                board[i][j] = new SudokuEntry();
 
         sd = new ScaleGestureDetector(context, new ScaleGestureDetector.SimpleOnScaleGestureListener() {
             @Override
@@ -79,11 +75,10 @@ public class SudokuView extends View {
         });
     }
 
-    public void setHints(SudokuHint[] hints) {
-        for (int i = 0; i < hints.length; i++) {
-            board[hints[i].row][hints[i].col].value = hints[i].value;
-            board[hints[i].row][hints[i].col].isHint = true;
-        }
+    public void setBoard(SudokuEntry[][] board) {
+        this.board = board;
+        boardSize = board.length;
+        squareSize = (int)Math.sqrt(boardSize);
 
         invalidate();
     }
@@ -97,6 +92,9 @@ public class SudokuView extends View {
 
     @Override
     protected void onDraw(Canvas canvas) {
+        if (board == null)
+            return;
+
         if (!isMeasuresKnown) {
             viewWidth = getWidth();
             viewHeight = getHeight();
@@ -114,22 +112,34 @@ public class SudokuView extends View {
         canvas.save();
         canvas.translate(offsetX, offsetY);
         canvas.scale(scaleFactor, scaleFactor, pivotX, pivotY);
-        /* draw the grid of the board */
-        float entryWidth = viewWidth / (float)BOARD_SIZE;
-        float entryHeight = viewHeight / (float)BOARD_SIZE;
-        for (int i = 0; i < BOARD_SIZE; i++)
-            for (int j = 0; j < BOARD_SIZE; j++) {
+
+        float entryWidth = viewWidth / (float)boardSize;
+        float entryHeight = viewHeight / (float)boardSize;
+        for (int i = 0; i < boardSize; i++)
+            for (int j = 0; j < boardSize; j++) {
                 if (board[i][j].isHint)
+                    /* fill in the background of hints */
                     canvas.drawRect(j * entryWidth, i * entryHeight, (j + 1) * entryWidth, (i + 1) * entryHeight, hintBackground);
 
+                /* draw the grid of the board */
                 canvas.drawRect(j * entryWidth, i * entryHeight, (j + 1) * entryWidth, (i + 1) * entryHeight, gridColor);
 
+                /* draw the numbers */
                 if (board[i][j].value != 0) {
                     int xPos = (int)(j * entryWidth + entryWidth / 2);
                     int yPos = (int) (i * entryHeight + (entryHeight / 2) - ((textColor.descent() + textColor.ascent()) / 2)) ;
                     canvas.drawText("" + board[i][j].value, xPos, yPos, textColor);
                 }
             }
+        /* draw frames for the squares */
+        float temp = gridColor.getStrokeWidth();
+        gridColor.setStrokeWidth(10.f);
+        float squareWidth = viewWidth / (float)squareSize;
+        float squareHeight = viewHeight / (float)squareSize;
+        for (int i = 0; i < squareSize; i++)
+            for (int j = 0; j < squareSize; j++)
+                canvas.drawRect(j * squareWidth, i * squareHeight, (j + 1) * squareWidth, (i + 1) * squareHeight, gridColor);
+        gridColor.setStrokeWidth(temp);
 
         canvas.restore();
     }
@@ -176,7 +186,7 @@ public class SudokuView extends View {
         x -= left;
         y -= top;
 
-        return board[(int)(y / (viewHeight * scaleFactor))][(int)(x / (viewWidth * scaleFactor))];
+        return board[(int)(y / ((viewHeight / (float)boardSize) * scaleFactor))][(int)(x / ((viewWidth / (float)boardSize) * scaleFactor))];
     }
 }
 

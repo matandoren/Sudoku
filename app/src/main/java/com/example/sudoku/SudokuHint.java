@@ -1,6 +1,8 @@
 package com.example.sudoku;
 
-public class SudokuHint {
+import java.io.Serializable;
+
+public class SudokuHint implements Serializable {
     public int row;
     public int col;
     public int value;

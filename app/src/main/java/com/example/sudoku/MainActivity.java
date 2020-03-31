@@ -46,19 +46,43 @@ public class MainActivity extends AppCompatActivity implements AddPhoneDialog.Ad
         createButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                MainActivity.this.openSudokuActiv();
+                MainActivity.this.openSudokuActivity();
             }
         });
     }
 
-    private void openSudokuActiv() {
+    private void openSudokuActivity() {
         Intent intent = new Intent(this,CreatePuzzleActivity.class);
         startActivity(intent);
     }
 
-    public void openPlayActiviy(){
+    public void openPlayActivity(){
         Intent intent = new Intent(this,PlayActivity.class);
         intent.putExtra("PHONENUMBER",this.phoneNumber);
+
+
+        /******************* MOCK UP **********************************/
+        SudokuHint[] hints = new SudokuHint[3];
+        hints[0] = new SudokuHint();
+        hints[1] = new SudokuHint();
+        hints[2] = new SudokuHint();
+
+        hints[0].row = 0;
+        hints[0].col = 3;
+        hints[0].value = 9;
+
+        hints[1].row = 6;
+        hints[1].col = 1;
+        hints[1].value = 2;
+
+        hints[2].row = 1;
+        hints[2].value = 9;
+        hints[2].col = 7;
+
+        intent.putExtra("HINTS", hints);
+        /*************************************************************/
+
+
         startActivity(intent);
     }
 
@@ -70,6 +94,6 @@ public class MainActivity extends AppCompatActivity implements AddPhoneDialog.Ad
     @Override
     public void addPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
-        openPlayActiviy();
+        openPlayActivity();
     }
 }
