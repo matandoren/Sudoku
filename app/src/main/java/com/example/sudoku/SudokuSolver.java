@@ -6,6 +6,13 @@ public class SudokuSolver {
     private static boolean[][] cols; // [col][value]
     private static boolean[][] squares; // [square][value]
     private static boolean isValidArrays;
+    private static boolean isRunning;
+    private static boolean terminateRunning;
+
+    public static void stop() {
+        if (isRunning)
+            terminateRunning = true;
+    }
 
     public static boolean isSolved(SudokuEntry[][] board) {
         // checks that there are no blank entries
@@ -20,12 +27,18 @@ public class SudokuSolver {
     }
 
     public static boolean isSolvable(SudokuEntry[][] board) {
+        isRunning = true;
         constructArrays(board);
-        if (!isValidArrays) // there were Sudoku rules violations
+        if (!isValidArrays) {// there were Sudoku rules violations
+            isRunning = false;
             return false;
+        }
 
         // try solving the puzzle using brute force with backtracking
-        return bruteForcePuzzle(board, 0, 0, false);
+        boolean result = bruteForcePuzzle(board, 0, 0, false);
+        isRunning = false;
+        terminateRunning = false;
+        return result;
     }
 
     private static void constructArrays(SudokuEntry[][] board) {
@@ -68,7 +81,7 @@ public class SudokuSolver {
 
         int squareSize = (int)Math.sqrt(boardSize);
         int squareIdx = col / squareSize + (row / squareSize) * squareSize;
-        for (int value = 0; value < boardSize; value++) // Assign every possible value to the current entry.
+        for (int value = 0; value < boardSize && !terminateRunning; value++) // Assign every possible value to the current entry.
         {
             if (!rows[row][value] && !cols[col][value] && !squares[squareIdx][value]) // If the current value fits in the current entry according to the Sudoku rules,
             {
