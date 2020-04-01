@@ -1,5 +1,6 @@
 package com.example.sudoku;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.annotation.SuppressLint;
@@ -11,6 +12,8 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.Random;
@@ -27,6 +30,9 @@ public class MainActivity extends AppCompatActivity implements AddPhoneDialog.Ad
     private String phoneNumber;
     private EditText numOfHintsEditText;
     private SudokuHint[] hints;
+    private ProgressBar progressBar;
+    private AlertDialog progressPopup;
+    private TextView progressTextView;
 
     @SuppressLint("SourceLockedOrientationActivity")
     @Override
@@ -58,6 +64,13 @@ public class MainActivity extends AppCompatActivity implements AddPhoneDialog.Ad
                 if (!(temp = numOfHintsEditText.getText().toString()).equals("") && (numOfHints = Integer.parseInt(temp)) >= MIN_HINTS && numOfHints < BOARD_SIZE * BOARD_SIZE) {
                     playButton.setEnabled(false);
                     numOfHintsEditText.setEnabled(false);
+
+                    final View view = getLayoutInflater().inflate(R.layout.progress_bar_layout ,null);
+                    progressPopup = new AlertDialog.Builder(MainActivity.this).setView(view).create();
+                    progressBar = view.findViewById(R.id.progressBar);
+                    progressTextView = view.findViewById(R.id.progress_textView);
+                    progressPopup.show();
+
                     new GenerateRandomBoardTask().execute(numOfHints);
                 } else
                     Toast.makeText(MainActivity.this, getString(R.string.num_of_hints_range_part1) + " " + MIN_HINTS + " " + getString(R.string.num_of_hints_range_part2) + " " + (BOARD_SIZE * BOARD_SIZE - 1), Toast.LENGTH_LONG).show();
@@ -96,13 +109,15 @@ public class MainActivity extends AppCompatActivity implements AddPhoneDialog.Ad
         openPlayActivity();
     }
 
-    private static class GenerateRandomBoardTask extends AsyncTask<Integer, Void, SudokuHint[]> {
+    private static class GenerateRandomBoardTask extends AsyncTask<Integer, Integer, SudokuHint[]> {
 
         @Override
         protected SudokuHint[] doInBackground(Integer... integers) {
             int numOfHints = integers[0];
             int row, col;
             Random random = new Random();
+            int progress = 0;
+            int iterations = 0;
 
             SudokuHint[] hints = new SudokuHint[numOfHints];
             SudokuEntry[][] board = new SudokuEntry[BOARD_SIZE][BOARD_SIZE];
@@ -114,25 +129,38 @@ public class MainActivity extends AppCompatActivity implements AddPhoneDialog.Ad
                 do { // find a random blank entry
                     row = random.nextInt(BOARD_SIZE);
                     col = random.nextInt(BOARD_SIZE);
+                    iterations++;
+                    publishProgress(progress, iterations);
                 } while (board[row][col].isHint);
                 board[row][col].isHint = true;
 
                 do { // find a random value for that entry so that the puzzle is solvable
                     board[row][col].value = random.nextInt(BOARD_SIZE) + 1;
+                    iterations++;
+                    publishProgress(progress, iterations);
                 } while (!SudokuSolver.isSolvable(board));
 
                 hints[i] = new SudokuHint();
                 hints[i].row = row;
                 hints[i].col = col;
                 hints[i].value = board[row][col].value;
+                progress += 100 / numOfHints;
+                publishProgress(progress, iterations);
             }
 
             return hints;
         }
 
         @Override
+        protected void onProgressUpdate(Integer... values) {
+            activeMainActivity.progressBar.setProgress(values[0]);
+            activeMainActivity.progressTextView.setText("" + values[1]);
+        }
+
+        @Override
         protected void onPostExecute(SudokuHint[] sudokuHints) {
             activeMainActivity.hints = sudokuHints;
+            activeMainActivity.progressPopup.dismiss();
             activeMainActivity.playButton.setEnabled(true);
             activeMainActivity.numOfHintsEditText.setEnabled(true);
             activeMainActivity.openAddPhoneDialog();
