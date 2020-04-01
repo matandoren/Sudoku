@@ -50,8 +50,10 @@ public class PlayActivity extends AppCompatActivity {
         phoneButton = findViewById(R.id.activity_play_phone_a_friend_button);
         chronometer = findViewById(R.id.activity_play_chronometer);
         friendsNumber = getIntent().getStringExtra("PHONENUMBER");
-        if (friendsNumber.equals(""))
+        if (friendsNumber.equals("")) {
             phoneButton.setEnabled(false);
+            phoneButton.setImageResource(R.drawable.ic_phone_black);
+        }
 
         chronometer.setBase(SystemClock.elapsedRealtime());
         chronometer.start();
