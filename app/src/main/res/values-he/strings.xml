@@ -12,4 +12,9 @@
     <string name="apply">אשר</string>
     <string name="submit_puzzle">הגש פאזל</string>
     <string name="radio_button_clear_text">נקה</string>
+    <string name="unsolvable_puzzle_toast">הפאזל הזה הוא בלתי פתיר!</string>
+    <string name="min_clues_allowed_toast">כמות הרמזים המינימלית המותרת היא</string>
+    <string name="number_of_hints_hint">כמות הרמזים</string>
+    <string name="num_of_hints_range_part1">כמות הרמזים צריכה להיות לפחות</string>
+    <string name="num_of_hints_range_part2">ולא מעל</string>
 </resources>

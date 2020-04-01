@@ -11,4 +11,9 @@
     <string name="apply">Apply</string>
     <string name="submit_puzzle">Submit Puzzle</string>
     <string name="radio_button_clear_text">Clear</string>
+    <string name="unsolvable_puzzle_toast">This puzzle is unsolvable!</string>
+    <string name="min_clues_allowed_toast">The minimum amount of hints allowed is</string>
+    <string name="number_of_hints_hint">Number of hints</string>
+    <string name="num_of_hints_range_part1">The number of hints has to be at least</string>
+    <string name="num_of_hints_range_part2">and no more than</string>
 </resources>

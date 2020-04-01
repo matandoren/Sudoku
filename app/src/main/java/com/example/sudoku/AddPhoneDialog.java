@@ -29,7 +29,6 @@ public class AddPhoneDialog extends AppCompatDialogFragment {
         View view = inflater.inflate(R.layout.add_phone_number_layout ,null);
 
         builder.setView(view)
-                .setTitle("Friend Helper")
                 .setNegativeButton(R.string.cancel, null)
                 .setPositiveButton(R.string.apply, new DialogInterface.OnClickListener() {
                     @Override
