@@ -17,4 +17,13 @@
     <string name="number_of_hints_hint">כמות הרמזים</string>
     <string name="num_of_hints_range_part1">כמות הרמזים צריכה להיות לפחות</string>
     <string name="num_of_hints_range_part2">ולא מעל</string>
+    <string name="puzzle_not_solved_toast">הפאזל הזה לא פתור!</string>
+    <string name="high_scores_title">טבלת שיאים</string>
+    <string name="rank_title">מיקום</string>
+    <string name="time_title">זמן</string>
+    <string name="name_title">שם</string>
+    <string name="hints_title">רמזים</string>
+    <string name="send_mail_button_text">שתף שיא</string>
+    <string name="name_is_mandatory_toast">חובה להכניס שם</string>
+    <string name="filename">com.example.sudoku.highscores</string>
 </resources>

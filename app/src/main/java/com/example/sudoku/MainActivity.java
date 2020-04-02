@@ -28,6 +28,7 @@ public class MainActivity extends AppCompatActivity implements AddPhoneDialog.Ad
     private Button playButton;
     private Button createButton;
     private String phoneNumber;
+    private String name;
     private EditText numOfHintsEditText;
     private SudokuHint[] hints;
     private ProgressBar progressBar;
@@ -61,6 +62,13 @@ public class MainActivity extends AppCompatActivity implements AddPhoneDialog.Ad
                 String temp;
                 int numOfHints;
 
+                EditText et = findViewById(R.id.name_editText);
+                name = et.getText().toString();
+                if (name.equals("")) {
+                    Toast.makeText(MainActivity.this, R.string.name_is_mandatory_toast, Toast.LENGTH_LONG).show();
+                    return;
+                }
+
                 if (!(temp = numOfHintsEditText.getText().toString()).equals("") && (numOfHints = Integer.parseInt(temp)) >= MIN_HINTS && numOfHints < BOARD_SIZE * BOARD_SIZE) {
                     playButton.setEnabled(false);
                     numOfHintsEditText.setEnabled(false);
@@ -80,6 +88,12 @@ public class MainActivity extends AppCompatActivity implements AddPhoneDialog.Ad
         createButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                EditText et = findViewById(R.id.name_editText);
+                name = et.getText().toString();
+                if (name.equals("")) {
+                    Toast.makeText(MainActivity.this, R.string.name_is_mandatory_toast, Toast.LENGTH_LONG).show();
+                    return;
+                }
                 MainActivity.this.openSudokuActivity();
             }
         });
@@ -87,14 +101,15 @@ public class MainActivity extends AppCompatActivity implements AddPhoneDialog.Ad
 
     private void openSudokuActivity() {
         Intent intent = new Intent(this,CreatePuzzleActivity.class);
+        intent.putExtra("NAME", name);
         startActivity(intent);
     }
 
     private void openPlayActivity(){
         Intent intent = new Intent(this,PlayActivity.class);
         intent.putExtra("PHONENUMBER",this.phoneNumber);
-
         intent.putExtra("HINTS", hints);
+        intent.putExtra("NAME", name);
 
         startActivity(intent);
     }

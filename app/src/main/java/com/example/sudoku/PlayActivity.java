@@ -68,8 +68,20 @@ public class PlayActivity extends AppCompatActivity {
         submitSolutionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                chronometer.stop();
                 isBoardEditable = false;
+                if (SudokuSolver.isSolved(board)) {
+                    long elapsedMillis = SystemClock.elapsedRealtime() - chronometer.getBase();
+                    chronometer.stop();
+                    Intent intent = new Intent(PlayActivity.this, HighScoresActivity.class);
+                    intent.putExtra("NUM_OF_HINTS", numOfHints);
+                    intent.putExtra("NAME", getIntent().getStringExtra("NAME"));
+                    intent.putExtra("TIME", elapsedMillis);
+                    startActivity(intent);
+                    finish();
+                } else {
+                    isBoardEditable = true;
+                    Toast.makeText(PlayActivity.this, R.string.puzzle_not_solved_toast, Toast.LENGTH_LONG).show();
+                }
             }
         });
 

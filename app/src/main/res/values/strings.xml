@@ -16,4 +16,13 @@
     <string name="number_of_hints_hint">Number of hints</string>
     <string name="num_of_hints_range_part1">The number of hints has to be at least</string>
     <string name="num_of_hints_range_part2">and no more than</string>
+    <string name="puzzle_not_solved_toast">This puzzle is not solved!</string>
+    <string name="high_scores_title">High Scores</string>
+    <string name="rank_title">rank</string>
+    <string name="time_title">time</string>
+    <string name="name_title">name</string>
+    <string name="hints_title">hints</string>
+    <string name="send_mail_button_text">Share your high score</string>
+    <string name="name_is_mandatory_toast">You must enter a name</string>
+    <string name="filename">com.example.sudoku.highscores</string>
 </resources>

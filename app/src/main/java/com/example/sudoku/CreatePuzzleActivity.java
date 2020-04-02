@@ -123,6 +123,7 @@ public class CreatePuzzleActivity extends AppCompatActivity implements AddPhoneD
         Intent intent = new Intent(this,PlayActivity.class);
         intent.putExtra("PHONENUMBER",this.phoneNumber);
         intent.putExtra("HINTS", hints);
+        intent.putExtra("NAME", getIntent().getStringExtra("NAME"));
         startActivity(intent);
     }
 
