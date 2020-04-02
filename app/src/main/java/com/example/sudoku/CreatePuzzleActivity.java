@@ -133,7 +133,7 @@ public class CreatePuzzleActivity extends AppCompatActivity implements AddPhoneD
         protected SudokuHint[] doInBackground(SudokuEntry[][]... sudokuEntries) {
             SudokuEntry[][] board = sudokuEntries[0];
 
-            if (!SudokuSolver.isSolvable(board))
+            if (SudokuSolver.isSolvable(board) == SudokuSolver.IsSolvableResult.UNSOLVABLE)
                 return null;
 
             SudokuHint[] hints = new SudokuHint[CreatePuzzleActivity.activeCreatePuzzleActivity.numberOfHints];

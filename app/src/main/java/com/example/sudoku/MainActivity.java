@@ -9,6 +9,7 @@ import android.content.pm.ActivityInfo;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -22,6 +23,8 @@ import java.util.Random;
 public class MainActivity extends AppCompatActivity implements AddPhoneDialog.AddPhoneDialogListener {
     private static MainActivity activeMainActivity;
 
+    private static final long TIMEOUT = 10000; // 10 seconds
+
     public static final int MIN_HINTS = 17;
     public static final int BOARD_SIZE = 9;
     private Button helpButton;
@@ -34,6 +37,7 @@ public class MainActivity extends AppCompatActivity implements AddPhoneDialog.Ad
     private ProgressBar progressBar;
     private AlertDialog progressPopup;
     private TextView progressTextView;
+    private CountDownTimer timer;
 
     @SuppressLint("SourceLockedOrientationActivity")
     @Override
@@ -141,19 +145,53 @@ public class MainActivity extends AppCompatActivity implements AddPhoneDialog.Ad
                     board[i][j] = new SudokuEntry();
 
             for (int i = 0; i < numOfHints; i++) {
-                do { // find a random blank entry
-                    row = random.nextInt(BOARD_SIZE);
-                    col = random.nextInt(BOARD_SIZE);
-                    iterations++;
-                    publishProgress(progress, iterations);
-                } while (board[row][col].isHint);
-                board[row][col].isHint = true;
+                SudokuSolver.IsSolvableResult result;
+                do {
+                    do { // find a random blank entry
+                        row = random.nextInt(BOARD_SIZE);
+                        col = random.nextInt(BOARD_SIZE);
+                        iterations++;
+                        publishProgress(progress, iterations);
+                    } while (board[row][col].isHint);
+                    board[row][col].isHint = true;
 
-                do { // find a random value for that entry so that the puzzle is solvable
-                    board[row][col].value = random.nextInt(BOARD_SIZE) + 1;
-                    iterations++;
-                    publishProgress(progress, iterations);
-                } while (!SudokuSolver.isSolvable(board));
+                    do { // find a random value for that entry so that the puzzle is solvable
+                        board[row][col].value = random.nextInt(BOARD_SIZE) + 1;
+                        iterations++;
+
+                        activeMainActivity.runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                activeMainActivity.timer = new CountDownTimer(TIMEOUT, TIMEOUT) {
+                                    @Override
+                                    public void onTick(long millisUntilFinished) {
+                                    }
+
+                                    @Override
+                                    public void onFinish() {
+                                        SudokuSolver.stop();
+                                    }
+                                }.start();
+                            }
+                        });
+
+                        publishProgress(progress, iterations);
+                        result = SudokuSolver.isSolvable(board);
+
+                        if (result != SudokuSolver.IsSolvableResult.CANCELLED)
+                            activeMainActivity.runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    activeMainActivity.timer.cancel();
+                                }
+                            });
+
+                    } while (result == SudokuSolver.IsSolvableResult.UNSOLVABLE);
+                    if (result == SudokuSolver.IsSolvableResult.CANCELLED) {
+                        board[row][col].isHint = false;
+                        board[row][col].value = 0;
+                    }
+                } while (result == SudokuSolver.IsSolvableResult.CANCELLED);
 
                 hints[i] = new SudokuHint();
                 hints[i].row = row;

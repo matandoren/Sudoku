@@ -26,16 +26,16 @@ public class SudokuSolver {
         return isValidArrays;
     }
 
-    public static boolean isSolvable(SudokuEntry[][] board) {
+    public static IsSolvableResult isSolvable(SudokuEntry[][] board) {
         isRunning = true;
         constructArrays(board);
         if (!isValidArrays) {// there were Sudoku rules violations
             isRunning = false;
-            return false;
+            return IsSolvableResult.UNSOLVABLE;
         }
 
         // try solving the puzzle using brute force with backtracking
-        boolean result = bruteForcePuzzle(board, 0, 0, false);
+        IsSolvableResult result = bruteForcePuzzle(board, 0, 0, false);
         isRunning = false;
         terminateRunning = false;
         return result;
@@ -67,13 +67,13 @@ public class SudokuSolver {
         isValidArrays = true;
     }
 
-    private static boolean bruteForcePuzzle(SudokuEntry[][] board, int row, int col, boolean isShowSolution) { // if isShowSolution is 'true', the board values will reflect the values of the first solution that was found
+    private static IsSolvableResult bruteForcePuzzle(SudokuEntry[][] board, int row, int col, boolean isShowSolution) { // if isShowSolution is 'true', the board values will reflect the values of the first solution that was found
         if (board[row][col].isHint) // If the current square is a hint, proceed to the next square.
         {
             if (col + 1 == boardSize) // If proceeding to the next column, results getting out of bounds, proceed to the next row and start from the first column.
             {
                 if (row + 1 == boardSize) // If proceeding to the next row, results getting out of bounds, the Sudoku is completed successfully.
-                    return true;
+                    return IsSolvableResult.SOLVABLE;
                 return bruteForcePuzzle(board, row + 1, 0, isShowSolution); // Proceed to the first column in the next row.
             }
             return bruteForcePuzzle(board, row, col + 1, isShowSolution); // Proceed to the next column.
@@ -93,18 +93,26 @@ public class SudokuSolver {
                 if (col + 1 == boardSize) // Proceed to the next entry.
                 {
                     if (row + 1 == boardSize)
-                        return true;
-                    if (bruteForcePuzzle(board, row + 1, 0, isShowSolution))
-                        return true;
+                        return IsSolvableResult.SOLVABLE;
+                    if (bruteForcePuzzle(board, row + 1, 0, isShowSolution) == IsSolvableResult.SOLVABLE)
+                        return IsSolvableResult.SOLVABLE;
                 }
-                else if (bruteForcePuzzle(board, row, col + 1, isShowSolution))
-                    return true;
+                else if (bruteForcePuzzle(board, row, col + 1, isShowSolution) == IsSolvableResult.SOLVABLE)
+                    return IsSolvableResult.SOLVABLE;
                 // If the next entry hit a Dead End, the current value of the current entry is wrong.
                 rows[row][value] = false; // Signal that the value is no longer taken in that particular row.
                 cols[col][value] = false; // Signal that the value is no longer taken in that particular column.
                 squares[squareIdx][value] = false; // Signal that the value is no longer taken in that particular square.
             }
         } // Try the next value.
-        return false; // None of the values fits. This means at least one of the preceding entries has a wrong value.
+        if (terminateRunning)
+            return IsSolvableResult.CANCELLED;
+        return IsSolvableResult.UNSOLVABLE; // None of the values fits. This means at least one of the preceding entries has a wrong value.
+    }
+
+    public enum IsSolvableResult {
+        SOLVABLE,
+        UNSOLVABLE,
+        CANCELLED
     }
 }
