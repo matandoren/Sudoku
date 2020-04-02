@@ -52,7 +52,7 @@ public class PlayActivity extends AppCompatActivity {
         friendsNumber = getIntent().getStringExtra("PHONENUMBER");
         if (friendsNumber.equals("")) {
             phoneButton.setEnabled(false);
-            phoneButton.setImageResource(R.drawable.ic_phone_black);
+            phoneButton.setImageResource(R.drawable.ic_phone_garyedout);
         }
 
         chronometer.setBase(SystemClock.elapsedRealtime());

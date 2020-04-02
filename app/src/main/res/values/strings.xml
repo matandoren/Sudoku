@@ -25,4 +25,5 @@
     <string name="send_mail_button_text">Share your high score</string>
     <string name="name_is_mandatory_toast">You must enter a name</string>
     <string name="filename">com.example.sudoku.highscores</string>
+    <string name="email">matandorendevops@gmail.com</string>
 </resources>

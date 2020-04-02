@@ -26,4 +26,5 @@
     <string name="send_mail_button_text">שתף שיא</string>
     <string name="name_is_mandatory_toast">חובה להכניס שם</string>
     <string name="filename">com.example.sudoku.highscores</string>
+    <string name="email">matandorendevops@gmail.com</string>
 </resources>
