@@ -90,11 +90,18 @@ public class HighScoresActivity extends AppCompatActivity {
     }
 
     private void sendMail(){
+        long time = latestHighScore.time / 1000; // converts the time from milliseconds to seconds
+        int seconds = (int)(time % 60);
+        time /= 60; // converts the time from seconds to minutes
+        int minutes = (int)(time % 60);
+        time /= 60; // converts the time from minutes to hours
+        String totalTime = String.format("%02d:%02d:%02d", time, minutes, seconds);
+
         String subject = "Hey Lookg at my score";
         String message = "Ive used that name: " + latestHighScore.name
                 + "\nIve got this Rank right now: " + latestHighScore.rank
                 + "\nAmount of hints: " + latestHighScore.hints
-                + "\nAnd the time it took me in Total is: " + latestHighScore.time;
+                + "\nAnd the time it took me in Total is: " + totalTime;
         String[] emails = {getString(R.string.email)};
 
         Intent intent = new Intent(Intent.ACTION_SEND);
